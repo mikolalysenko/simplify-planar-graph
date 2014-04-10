@@ -54,7 +54,7 @@ npm install simplify-2d-complex
 # API
 
 #### `require("simplify-2d-complex")(cells, positions, minArea)`
-Simplies the 2D mesh to a gfixed tolerance
+Simplies the 2D mesh to a fixed tolerance
 
 * `cells` is a collection of edges in the 2D mesh represented as pairs of indices into the vertices
 * `positions` is a list of vertex coordinates encoded as an array of 2D arrays
