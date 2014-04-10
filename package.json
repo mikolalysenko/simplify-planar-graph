@@ -1,0 +1,36 @@
+{
+  "name": "simplify-2d-complex",
+  "version": "0.0.0",
+  "description": "Simplifies a 2D polygonal region",
+  "main": "simplify.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "robust-orientation": "~1.0.1",
+    "simplicial-complex": "~0.3.3"
+  },
+  "devDependencies": {
+    "tape": "~2.12.3"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mikolalysenko/simplify-2d-complex.git"
+  },
+  "keywords": [
+    "polygon",
+    "simplify",
+    "region",
+    "vertex",
+    "collapse"
+  ],
+  "author": "Mikola Lysenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikolalysenko/simplify-2d-complex/issues"
+  },
+  "homepage": "https://github.com/mikolalysenko/simplify-2d-complex"
+}
