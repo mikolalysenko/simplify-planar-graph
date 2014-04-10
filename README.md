@@ -22,7 +22,7 @@ console.log(simplify(points, cells, 0.1))
 
 Output:
 
-```
+```javascript
 { positions:
    [ [ 0.6845471059286886, 0.7289686274214116 ],
      [ 0.24868988716485496, 0.9685831611286311 ],
