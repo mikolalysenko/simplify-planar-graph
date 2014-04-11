@@ -1,6 +1,6 @@
 {
   "name": "simplify-2d-complex",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Simplifies a 2D polygonal region",
   "main": "simplify.js",
   "directories": {

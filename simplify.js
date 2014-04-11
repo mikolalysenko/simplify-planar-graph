@@ -5,6 +5,12 @@ module.exports = simplifyPolygon
 var orient = require("robust-orientation")
 var sc = require("simplicial-complex")
 
+function errorWeight(base, a, b) {
+  var area = Math.abs(orient(base, a, b))
+  var perim = Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1]-b[1], 2))
+  return area / perim
+}
+
 function simplifyPolygon(cells, positions, minArea) {
 
   var n = positions.length
@@ -52,11 +58,9 @@ function simplifyPolygon(cells, positions, minArea) {
     if((s < 0) || (t<0)) {
       return Infinity
     } else {
-      return Math.abs(orient(positions[i], positions[s], positions[t]))
+      return errorWeight(positions[i], positions[s], positions[t])
     }
   }
-
-
 
   //Swaps two nodes on the heap (i,j) are the index of the nodes
   function heapSwap(i,j) {
@@ -214,24 +218,34 @@ function simplifyPolygon(cells, positions, minArea) {
   var nv = npositions.length
 
   //Build remapped cells
-  function traceOut(v) {
+  function traceOut(v, d) {
+    if(d < 0 || outv[v] < 0) {
+      return -1
+    }
     if(dead[v]) {
-      return outv[v] = traceOut(outv[v])
+      return outv[v] = traceOut(outv[v], d-1)
     }
     return v
   }
-  function traceIn(v) {
+  function traceIn(v, d) {
+    if(d < 0 || inv[v] < 0) {
+      return -1
+    }
     if(dead[v]) {
-      return inv[v] = traceIn(inv[v])
+      return inv[v] = traceIn(inv[v], d-1)
     }
     return v
   }
   var ncells = []
   cells.forEach(function(c) {
-    var cin = index[traceOut(c[0])]
-    var cout = index[traceIn(c[1])]
-    if(cin !== cout) {
-      ncells.push([ cin, cout ])
+    var tin = traceOut(c[0], nv)
+    var tout = traceIn(c[1], nv)
+    if(tin >= 0 && tout >= 0) {
+      var cin = index[tin]
+      var cout = index[tout]
+      if(cin !== cout) {
+        ncells.push([ cin, cout ])
+      }
     }
   })
 
