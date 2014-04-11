@@ -56,19 +56,7 @@ function simplifyPolygon(cells, positions, minArea) {
     }
   }
 
-  //Initialize weights and heap
-  var heap = new Array(n)
-  var index = new Array(n)
-  var heapCount = 0
-  for(var i=0; i<n; ++i) {
-    var w = weights[i] = computeWeight(i)
-    if(w < Infinity) {
-      index[i] = heapCount
-      heap[heapCount++] = i
-    } else {
-      index[i] = -1
-    }
-  }
+
 
   //Swaps two nodes on the heap (i,j) are the index of the nodes
   function heapSwap(i,j) {
@@ -85,29 +73,39 @@ function simplifyPolygon(cells, positions, minArea) {
     return weights[heap[i]]
   }
 
+  function heapParent(i) {
+    if(i & 1) {
+      return (i - 1) >> 1
+    }
+    return (i >> 1) - 1
+  }
+
   //Bubble element i down the heap
   function heapDown(i) {
     var w = heapWeight(i)
     while(true) {
+      var tw = w
       var left  = 2*i + 1
       var right = 2*(i + 1)
+      var next = i
       if(left < heapCount) {
         var lw = heapWeight(left)
-        if(lw < w) {
-          heapSwap(i, left)
-          i = left
-          continue
+        if(lw < tw) {
+          next = left
+          tw = lw
         }
       }
       if(right < heapCount) {
         var rw = heapWeight(right)
-        if(rw < w) {
-          heapSwap(i, right)
-          i = right
-          continue
+        if(rw < tw) {
+          next = right
         }
       }
-      return i
+      if(next === i) {
+        return i
+      }
+      heapSwap(i, next)
+      i = next      
     }
   }
 
@@ -115,7 +113,7 @@ function simplifyPolygon(cells, positions, minArea) {
   function heapUp(i) {
     var w = heapWeight(i)
     while(i > 0) {
-      var parent = i >> 1
+      var parent = heapParent(i)
       if(parent >= 0) {
         var pw = heapWeight(parent)
         if(w < pw) {
@@ -154,11 +152,6 @@ function simplifyPolygon(cells, positions, minArea) {
     return heapUp(heapCount-1)
   }
 
-  //Initialize heap
-  for(var i=heapCount>>1; i>0; --i) {
-    heapUp(i)
-  }
-
   //Kills a vertex (assume vertex already removed from heap)
   function kill(i) {
     if(dead[i]) {
@@ -184,6 +177,23 @@ function simplifyPolygon(cells, positions, minArea) {
     }
   }
 
+  //Initialize weights and heap
+  var heap = []
+  var index = new Array(n)
+  for(var i=0; i<n; ++i) {
+    var w = weights[i] = computeWeight(i)
+    if(w < Infinity) {
+      index[i] = heap.length
+      heap.push(i)
+    } else {
+      index[i] = -1
+    }
+  }
+  var heapCount = heap.length
+  for(var i=heapCount>>1; i>=0; --i) {
+    heapDown(i)
+  }
+  
   //Kill vertices
   while(true) {
     var hmin = heapPop()
