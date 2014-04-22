@@ -1,7 +1,7 @@
 {
-  "name": "simplify-2d-complex",
+  "name": "simplify-planar-graph",
   "version": "1.0.0",
-  "description": "Simplifies a 2D polygonal region",
+  "description": "Simplifies a planar graph",
   "main": "simplify.js",
   "directories": {
     "test": "test"
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mikolalysenko/simplify-2d-complex.git"
+    "url": "git://github.com/mikolalysenko/simplify-planar-graph.git"
   },
   "keywords": [
     "polygon",
@@ -30,7 +30,7 @@
   "author": "Mikola Lysenko",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mikolalysenko/simplify-2d-complex/issues"
+    "url": "https://github.com/mikolalysenko/simplify-planar-graph/issues"
   },
-  "homepage": "https://github.com/mikolalysenko/simplify-2d-complex"
+  "homepage": "https://github.com/mikolalysenko/simplify-planar-graph"
 }
