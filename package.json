@@ -25,7 +25,14 @@
     "simplify",
     "region",
     "vertex",
-    "collapse"
+    "collapse",
+    "planar",
+    "graph"
+    "planar graph",
+    "edge",
+    "cell",
+    "complex",
+    "polyline"
   ],
   "author": "Mikola Lysenko",
   "license": "MIT",
