@@ -57,6 +57,26 @@ tape("simplify-2d-complex", function(t) {
     edges: [[0,1], [0,2], [0,3], [0,4]]
   }, "non-manifold")
 
+  t.same(simplify([[0,1], [1,2], [2,0]],
+      [[0,0],
+      [1,0],
+      [0,1]],
+      0.1
+    ),{
+    positions: [[0,0], [1,0], [0,1]],
+    edges: [[0,1], [2,0], [1,2]]
+  })
+
+  t.same(simplify([[0,1], [1,2], [2,0]],
+      [[0,0],
+      [1,0],
+      [0,1]],
+      100000.0
+    ),{
+    positions: [],
+    edges: []
+  })
+
   //Test line simplification
   for(var j=0; j<100; ++j) {
     var theta = 2.0 * Math.PI * j / 100.0
