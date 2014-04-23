@@ -227,12 +227,12 @@ function simplifyPolygon(cells, positions, minArea) {
     do {
       //Walk two steps with h
       var nh = seq[h]
-      if(nh < 0) {
+      if(!dead[h] || nh < 0 || nh === h) {
         break
       }
       h = nh
       nh = seq[h]
-      if(nh < 0) {
+      if(!dead[h] || nh < 0 || nh === h) {
         break
       }
       h = nh
