@@ -31,17 +31,17 @@ function simplifyPolygon(cells, positions, minArea) {
   for(var i=0; i<nc; ++i) {
     var c = cells[i]
     if(c.length !== 2) {
-      throw new Error("Can't simplify higher or lower dimensional cells")
+      throw new Error("Input must be a graph")
     }
-    var s = c[0]
-    var t = c[1]
+    var s = c[1]
+    var t = c[0]
     if(outv[t] !== -1) {
-      inv[t] = outv[t] = -2
+      outv[t] = -2
     } else {
       outv[t] = s
     }
     if(inv[s] !== -1) {
-      inv[s] = outv[s] = -2
+      inv[s] = -2
     } else {
       inv[s] = t
     }
@@ -55,7 +55,7 @@ function simplifyPolygon(cells, positions, minArea) {
     //TODO: Check that the line segment doesn't cross once simplified
     var s = inv[i]
     var t = outv[i]
-    if((s < 0) || (t<0)) {
+    if((s<0) || (t<0)) {
       return Infinity
     } else {
       return errorWeight(positions[i], positions[s], positions[t])
@@ -172,6 +172,7 @@ function simplifyPolygon(cells, positions, minArea) {
     if(outv[s] >= 0) {
       outv[s] = t
     }
+
     //Update weights on s and t
     if(index[s] >= 0) {
       heapUpdate(index[s], computeWeight(s))
@@ -217,30 +218,40 @@ function simplifyPolygon(cells, positions, minArea) {
   }
   var nv = npositions.length
 
-  //Build remapped cells
-  function traceOut(v, d) {
-    if(d < 0 || outv[v] < 0) {
-      return -1
+  function tortoiseHare(seq, start) {
+    if(seq[start] < 0) {
+      return start
     }
-    if(dead[v]) {
-      return outv[v] = traceOut(outv[v], d-1)
+    var t = start
+    var h = start
+    do {
+      //Walk two steps with h
+      var nh = seq[h]
+      if(nh < 0) {
+        break
+      }
+      h = nh
+      nh = seq[h]
+      if(nh < 0) {
+        break
+      }
+      h = nh
+
+      //Walk one step with t
+      t = seq[t]
+    } while(t !== h)
+    //Compress cycles
+    for(var v=start; v!==h; v = seq[v]) {
+      seq[v] = h
     }
-    return v
+    return h
   }
-  function traceIn(v, d) {
-    if(d < 0 || inv[v] < 0) {
-      return -1
-    }
-    if(dead[v]) {
-      return inv[v] = traceIn(inv[v], d-1)
-    }
-    return v
-  }
+
   var ncells = []
   cells.forEach(function(c) {
-    var tin = traceOut(c[0], nv)
-    var tout = traceIn(c[1], nv)
-    if(tin >= 0 && tout >= 0) {
+    var tin = tortoiseHare(inv, c[0])
+    var tout = tortoiseHare(outv, c[1])
+    if(tin >= 0 && tout >= 0 && tin !== tout) {
       var cin = index[tin]
       var cout = index[tout]
       if(cin !== cout) {
@@ -255,6 +266,6 @@ function simplifyPolygon(cells, positions, minArea) {
   //Return final list of cells
   return {
     positions: npositions,
-    edge: ncells
+    edges: ncells
   }
 }
