@@ -57,17 +57,19 @@ npm install simplify-planar-graph
 
 # API
 
-#### `require("simplify-planar-graph")(edges, positions, minArea)`
-Simplies the 2D mesh to a fixed tolerance
+#### `require("simplify-planar-graph")(edges, positions, tolerance)`
+Simplies a planar graph to a given tolerance
 
-* `cells` is a collection of edges in the 2D mesh represented as pairs of indices into the vertices
+* `edges` are the edges of the graph represented by pairs of vertex indices
 * `positions` is a list of vertex coordinates encoded as an array of 2D arrays
-* `minArea` is the area of the smallest corner in the resulting polygonal region
+* `tolerance` controls the target aspect ratio of the corners of the mesh
 
-**Returns** A simplicial complex with two properties:
+**Returns** A new planar graph encoded as a JSON object with two properties:
 
+* `edges` is an array of edges encoded as pairs of indices
 * `positions` is an array of positions for the simplicial complex
-* `cells` is an array of edges encoded as pairs of indices
+
+**Note** The current implementation does not detect the removal of features which cross existing line segments.  Picking a high tolerance value may result in destroying the planarity of the resulting graph.  Eventually if it becomes a priority I may go back and implement code to detect and handle these cases.
 
 # Credits
 (c) 2014 Mikola Lysenko. MIT License

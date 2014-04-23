@@ -5,7 +5,7 @@ var tape = require("tape")
 
 tape("simplify-2d-complex", function(t) {
 
-
+  //Test line simplification
   for(var j=0; j<100; ++j) {
     var theta = 2.0 * Math.PI * j / 100.0
     var dx = Math.cos(theta)
@@ -26,6 +26,8 @@ tape("simplify-2d-complex", function(t) {
       }, "angle=" + theta + " var=" + w)
     }
   }
+
+  //Test non-manifold simplification
 
   t.end()
 })

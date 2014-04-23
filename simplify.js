@@ -255,6 +255,6 @@ function simplifyPolygon(cells, positions, minArea) {
   //Return final list of cells
   return {
     positions: npositions,
-    cells: ncells
+    edge: ncells
   }
 }
